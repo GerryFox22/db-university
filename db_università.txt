@@ -32,3 +32,80 @@
 8. 
     SELECT * FROM `teachers` 
     WHERE `phone` IS NULL;
+
+
+
+------------------------------------------------
+
+GROUP BY 
+
+1. 
+    SELECT COUNT(`id`) AS "studenti_iscritti", YEAR (`enrolment_date`) AS "anno"
+    FROM `students`  
+    GROUP BY anno;
+
+2.
+    SELECT COUNT(*) AS "numero_insegnanti", `office_address` AS "indirizzo_ufficio"
+    FROM `teachers`
+    GROUP BY indirizzo_ufficio;
+
+3.
+    SELECT AVG(`vote`) AS "media_voto" , `exam_id`
+    FROM `exam_student`
+    GROUP BY `exam_id`;
+
+4.
+    SELECT COUNT(`id`) AS "numero_corsi", `department_id` AS "dipartimento"
+    FROM `degrees`
+    GROUP BY dipartimento;
+
+
+-------------------------------------------------
+
+
+JOIN
+
+1.
+    SELECT `students`.`name`, `students`.`surname`,`degrees`.`name`
+    FROM `students` 
+    JOIN `degrees` ON `degrees`.`id`= `students`.`degree_id`
+    WHERE `degrees`.`name` = "Corso di Laurea in Economia";
+
+2.
+    SELECT  `degrees`.`name`,`departments`.`name`
+    FROM `degrees`
+    JOIN `departments` ON `departments`.`id`= `degrees`.`department_id`
+    WHERE `departments`.`name`= "Dipartimento di Neuroscienze";
+
+3.
+    SELECT `courses`.`name` AS "nome_corso" ,`teachers`.`name`,`teachers`.`surname`
+    FROM `courses`
+    JOIN `course_teacher` ON `course_teacher`.`course_id`=`courses`.`id`
+    JOIN `teachers` ON `teachers`.`id` = `course_teacher`.`teacher_id`
+    WHERE `teachers`.`id`=44;
+
+4.
+    SELECT `students`.`surname`,`students`.`name`, `degrees`.`name` AS "corso",`departments`.`name`AS "dipartimento"
+    FROM `students`
+    JOIN `degrees` ON `degrees`.`id`=`students`.`degree_id`
+    JOIN `departments` ON `departments`.`id`=`degrees`.`department_id`  
+    ORDER BY `students`.`surname` ASC;
+
+5.
+    SELECT `degrees`.`name` ,`courses`.`name`,`teachers`.`name` AS "nome_insegnante", `teachers`.`surname` AS "cognome_insegnante"
+    FROM `degrees`
+    JOIN `courses` ON `courses`.`id` = `degrees`.`id`
+    JOIN `course_teacher` ON `course_teacher`.`course_id`=`courses`.`id`
+    JOIN `teachers` ON `teachers`.`id` = `course_teacher`.`teacher_id`  
+    ORDER BY `degrees`.`department_id` ASC;
+
+6.
+    SELECT DISTINCT `teachers`.`name`,`teachers`.`surname`,`departments`.`name`
+    FROM `teachers`
+    JOIN `course_teacher`ON `course_teacher`.`teacher_id`=`teachers`.`id`
+    JOIN `courses` ON `courses`.`id` = `course_teacher`.`course_id`
+    JOIN `degrees` ON `degrees`.`id` = `courses`.`degree_id`
+    JOIN `departments` ON `departments`.`id` = `degrees`.`department_id`
+    WHERE `departments`.`name` = "Dipartimento di Matematica"  
+    ORDER BY `teachers`.`name` ASC;
+
